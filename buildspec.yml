@@ -4,3 +4,4 @@ phases:
     commands:
       - sam build
       - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
+      - sam deploy -t template.yaml --stack-name sam-cli-test-v3 --capabilities=CAPABILITY_IAM
