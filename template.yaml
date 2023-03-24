@@ -1,139 +1,57 @@
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "CloudFormationTemplate",
-            "Effect": "Allow",
-            "Action": [
-                "cloudformation:CreateChangeSet"
-            ],
-            "Resource": [
-                "arn:aws:cloudformation:*:aws:transform/Serverless-2016-10-31"
-            ]
-        },
-        {
-            "Sid": "CloudFormationStack",
-            "Effect": "Allow",
-            "Action": [
-                "cloudformation:CreateChangeSet",
-                "cloudformation:CreateStack",
-                "cloudformation:DeleteStack",
-                "cloudformation:DescribeChangeSet",
-                "cloudformation:DescribeStackEvents",
-                "cloudformation:DescribeStacks",
-                "cloudformation:ExecuteChangeSet",
-                "cloudformation:GetTemplateSummary",
-                "cloudformation:ListStackResources",
-                "cloudformation:UpdateStack"
-            ],
-            "Resource": [
-                "arn:aws:cloudformation:*:548616401217:stack/*"
-            ]
-        },
-        {
-            "Sid": "S3",
-            "Effect": "Allow",
-            "Action": [
-                "s3:CreateBucket",
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::*/*"
-            ]
-        },
-        {
-            "Sid": "ECRRepository",
-            "Effect": "Allow",
-            "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:BatchGetImage",
-                "ecr:CompleteLayerUpload",
-                "ecr:CreateRepository",
-                "ecr:DeleteRepository",
-                "ecr:DescribeImages",
-                "ecr:DescribeRepositories",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetRepositoryPolicy",
-                "ecr:InitiateLayerUpload",
-                "ecr:ListImages",
-                "ecr:PutImage",
-                "ecr:SetRepositoryPolicy",
-                "ecr:UploadLayerPart"
-            ],
-            "Resource": [
-                "arn:aws:ecr:*:548616401217:repository/*"
-            ]
-        },
-        {
-            "Sid": "ECRAuthToken",
-            "Effect": "Allow",
-            "Action": [
-                "ecr:GetAuthorizationToken"
-            ],
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Sid": "Lambda",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:AddPermission",
-                "lambda:CreateFunction",
-                "lambda:DeleteFunction",
-                "lambda:GetFunction",
-                "lambda:GetFunctionConfiguration",
-                "lambda:ListTags",
-                "lambda:RemovePermission",
-                "lambda:TagResource",
-                "lambda:UntagResource",
-                "lambda:UpdateFunctionCode",
-                "lambda:UpdateFunctionConfiguration"
-            ],
-            "Resource": [
-                "arn:aws:lambda:*:548616401217:function:*"
-            ]
-        },
-        {
-            "Sid": "IAM",
-            "Effect": "Allow",
-            "Action": [
-                "iam:CreateRole",
-                "iam:AttachRolePolicy",
-                "iam:DeleteRole",
-                "iam:DetachRolePolicy",
-                "iam:GetRole",
-                "iam:TagRole"
-            ],
-            "Resource": [
-                "arn:aws:iam::548616401217:role/*"
-            ]
-        },
-        {
-            "Sid": "IAMPassRole",
-            "Effect": "Allow",
-            "Action": "iam:PassRole",
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "iam:PassedToService": "lambda.amazonaws.com"
-                }
-            }
-        },
-        {
-            "Sid": "APIGateway",
-            "Effect": "Allow",
-            "Action": [
-                "apigateway:DELETE",
-                "apigateway:GET",
-                "apigateway:PATCH",
-                "apigateway:POST",
-                "apigateway:PUT"
-            ],
-            "Resource": [
-                "arn:aws:apigateway:*::*"
-            ]
-        }
-    ]
-}
+
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+
+  MyLambdaFunction:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+              return {
+                  'statusCode': 200,
+                  'body': 'Hello from Lambda!'
+              }
+      Handler: index.lambda_handler
+      Role: !GetAtt MyLambdaRole.Arn
+      Runtime: python3.8
+ 
+ 
+  MyRestApi:
+    Type: 'AWS::ApiGateway::RestApi'
+    Properties:
+      Name: MyRestApi
+  MyResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ParentId: !GetAtt MyRestApi.RootResourceId
+      PathPart: 'hello'
+  MyMethod:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ResourceId: !Ref MyResource
+      HttpMethod: GET
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:548616401217:function:test-function/invocations'
+  MyDeployment:
+    Type: 'AWS::ApiGateway::Deployment'
+    DependsOn:
+      - MyMethod
+    Properties:
+      RestApiId: !Ref MyRestApi
+  MyStage:
+    Type: 'AWS::ApiGateway::Stage'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      DeploymentId: !Ref MyDeployment
+      StageName: prod
+      
+Outputs:
+  ApiEndpoint:
+    Description: 'API endpoint URL'
+    Value: !Sub 'https://test-api.execute-api.us-east-1.amazonaws.com/dev/hello'
