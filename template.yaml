@@ -1,4 +1,21 @@
 AWSTemplateFormatVersion: '2010-09-09'
+
+Description: |
+  "SAM Template for sam-tutorial"
+  
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label: {default: 'Optional parameters'}
+        Parameters:
+          - ProjectName
+          
+Parameters: 
+  ProjectName:
+    Type: String
+    Description: 'Name of the project'
+    Default: 'sam-tutorial'
+    
 Resources:
   MyLambdaFunction:
     Type: 'AWS::Lambda::Function'
