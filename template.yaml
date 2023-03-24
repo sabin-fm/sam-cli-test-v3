@@ -54,4 +54,4 @@ Resources:
 Outputs:
   ApiEndpoint:
     Description: 'API endpoint URL'
-    Value: !Sub 'https://test-api.execute-api.us-east-1.amazonaws.com/dev/hello'
+    Value: !Sub 'https://test-api.execute-api.us-east-1.amazonaws.com/prod/hello'
