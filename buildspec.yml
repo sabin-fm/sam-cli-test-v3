@@ -14,7 +14,7 @@ phases:
   post_build:
     commands:
       - sam build
-      - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file package.yaml
+      - sam package --template-file template.yaml --s3-bucket sam-cli-dionysus-bucket --output-template-file package.yaml
       - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file package.yaml --stack-name samcli-python-stack --capabilities CAPABILITY_IAM
       
  
