@@ -9,21 +9,27 @@ Resources:
       Runtime: python3.9
          
   LambdaExecutionRole:
-    Type: "AWS::IAM::Role"
+    Type: 'AWS::IAM::Role'
     Properties:
-      RoleName: "my-lambda-execution-role"
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
-          - Effect: "Allow"
+          - Effect: Allow
             Principal:
-              Service:
-                - "lambda.amazonaws.com"
-            Action:
-              - "sts:AssumeRole"
-      Path: "/"
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Path: '/'
+      Policies:
+        - PolicyName: MyLambdaPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: '*'
   RestApi:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
