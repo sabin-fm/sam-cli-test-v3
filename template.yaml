@@ -4,10 +4,10 @@ Resources:
   MyLambdaFunction:
     Type: 'AWS::Lambda::Function'
     Properties:
-      FunctionName : my-test-funtion
+      FunctionName : my-test-lambda-funtion
       Handler: lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
-      Runtime: python3.8
+      Runtime: python3.9
       
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
@@ -35,7 +35,7 @@ Resources:
       
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
-      Name: my-test-rest-Api
+      Name: my-test-rest-api
       EndpointConfiguration:
         Types:
           - REGIONAL
@@ -56,7 +56,7 @@ Resources:
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:548616401217:function:my-test-funtion/invocations'
+        Uri: !Sub 'arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:548616401217:function:my-test-lambda-funtion/invocations'
   MyDeployment:
     Type: 'AWS::ApiGateway::Deployment'
     DependsOn:
@@ -72,4 +72,4 @@ Resources:
 Outputs:
   ApiEndpoint:
     Description: 'API endpoint URL'
-    Value: !Sub 'https://my-test-rest-Api.execute-api.us-east-1.amazonaws.com/dev/hello'
+    Value: !Sub 'https://my-test-rest-api.execute-api.us-east-1.amazonaws.com/dev/hello'
