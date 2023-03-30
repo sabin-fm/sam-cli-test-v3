@@ -88,9 +88,9 @@ Resources:
       RestApiId: !Ref MyRestApi
       DeploymentId: !Ref MyDeployment
       StageName: dev
-        Variables:
-          MY_VAR_1: value1
-          MY_VAR_2: value2
+      Variables:
+        MY_VAR_1: value1
+        MY_VAR_2: value2
 
   MyLambdaPermission:
     Type: 'AWS::Lambda::Permission'
