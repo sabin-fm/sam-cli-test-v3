@@ -76,4 +76,4 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MyLambdaFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:aws:execute-api:us-east-1:548616401217:yr26qwxko9/*/GET/hello'
+      SourceArn: !Sub 'arn:aws:execute-api:us-east-1:548616401217:${MyRestApi}/*/GET/hello'
