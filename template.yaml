@@ -69,7 +69,7 @@ Resources:
       ResourceId: !Ref MyResource
       HttpMethod: GET
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
-      AuthorizerId: !Ref MyCognitoAuthorizer  # Set the ID of the authorizer
+      AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
