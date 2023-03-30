@@ -19,6 +19,10 @@ Resources:
       Handler: lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
+      Environment:
+        Variables:
+          ENV_VAR_1: value1
+          ENV_VAR_2: value2
 
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
@@ -64,7 +68,8 @@ Resources:
       RestApiId: !Ref MyRestApi
       ResourceId: !Ref MyResource
       HttpMethod: GET
-      AuthorizationType: NONE
+      AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
+      AuthorizerId: !Ref MyCognitoAuthorizer  # Set the ID of the authorizer
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
@@ -91,3 +96,12 @@ Resources:
       FunctionName: !Ref MyLambdaFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/*/GET/hello'
+  
+  MyAuthorizer:
+    Type: 'AWS::ApiGateway::Authorizer'
+    Properties:
+      Name: my-cognito-authorizer
+      Type: COGNITO_USER_POOLS
+      IdentitySource: method.request.header.Authorization
+      RestApiId: !Ref MyRestApi
+      ProviderARNs: arn:aws:cognito-idp:us-east-1:548616401217:userpool/us-east-1_t4ca30NhA
