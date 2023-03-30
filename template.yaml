@@ -134,9 +134,9 @@ Resources:
     Properties:
       RestApiId: !Ref MyRestApi
       DeploymentId: !Ref MyDeployment
-      StageName: dev
+      StageName: stage
       Variables:
-        env: dev
+        env: stage
        
 
   MyLambdaPermission:
