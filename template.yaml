@@ -129,7 +129,7 @@ Resources:
       Variables:
         env: dev
         
-    MyStage2:
+  MyStage2:
     Type: 'AWS::ApiGateway::Stage'
     Properties:
       RestApiId: !Ref MyRestApi
