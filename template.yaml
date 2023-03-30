@@ -70,7 +70,7 @@ Resources:
       DeploymentId: !Ref MyDeployment
       StageName: dev
       
- MyLambdaPermission:
+  MyLambdaPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
