@@ -45,7 +45,7 @@ Resources:
     Properties:
       RestApiId: !Ref MyRestApi
       ParentId: !GetAtt MyRestApi.RootResourceId
-      PathPart: 'hello'
+      PathPart: hello
   MyMethod:
     Type: 'AWS::ApiGateway::Method'
     Properties:
