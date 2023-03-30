@@ -69,7 +69,11 @@ Resources:
       RestApiId: !Ref MyRestApi
       DeploymentId: !Ref MyDeployment
       StageName: dev
-Outputs:
-  ApiEndpoint:
-    Description: 'API endpoint URL'
-    Value: !Sub 'https://my-test-rest-api.execute-api.us-east-1.amazonaws.com/dev/hello'
+      
+ MyLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref MyLambdaFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:us-east-1:548616401217:my-test-restapi/*/GET/hello'
