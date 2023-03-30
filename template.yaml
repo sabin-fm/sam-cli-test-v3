@@ -12,18 +12,28 @@ Parameters:
     Description: The AWS account ID where the resources will be created.
 
 Resources:
-  MyLambdaFunction:
+  MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
-      FunctionName : my-test-function
-      Handler: lambda_function.lambda_handler
+      FunctionName : my-test-function-1
+      Handler: lambda_function_1.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
       Environment:
         Variables:
-          ENV_VAR_1: value1
-          ENV_VAR_2: value2
+          env: dev
 
+  MyLambdaFunction2:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName : my-test-function-2
+      Handler: lambda_function_2.lambda_handler
+      Role: !GetAtt MyLambdaRole.Arn
+      Runtime: python3.9
+      Environment:
+        Variables:
+          env: stage
+          
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -55,42 +65,79 @@ Resources:
         Types:
           - REGIONAL
 
-  MyResource:
+  MyResource1:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref MyRestApi
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'hello'
+      
+  MyResource2:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ParentId: !GetAtt MyRestApi.RootResourceId
+      PathPart: 'world'
 
-  MyMethod:
+  MyMethod1:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       RestApiId: !Ref MyRestApi
-      ResourceId: !Ref MyResource
+      ResourceId: !Ref MyResource1
       HttpMethod: GET
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
       AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction.Arn}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
+        
+  MyMethod2:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ResourceId: !Ref MyResource2
+      HttpMethod: GET
+      AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
+      AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction2.Arn}/invocations'
 
-  MyDeployment:
+
+  MyDeployment1:
     Type: 'AWS::ApiGateway::Deployment'
     DependsOn:
-      - MyMethod
+      - MyMethod1
+    Properties:
+      RestApiId: !Ref MyRestApi
+  
+  MyDeployment2:
+    Type: 'AWS::ApiGateway::Deployment'
+    DependsOn:
+      - MyMethod2
     Properties:
       RestApiId: !Ref MyRestApi
 
-  MyStage:
+  MyStage1:
     Type: 'AWS::ApiGateway::Stage'
     Properties:
       RestApiId: !Ref MyRestApi
       DeploymentId: !Ref MyDeployment
       StageName: dev
       Variables:
-        MY_VAR_1: value1
-        MY_VAR_2: value2
+        env: dev
+        
+    MyStage2:
+    Type: 'AWS::ApiGateway::Stage'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      DeploymentId: !Ref MyDeployment
+      StageName: dev
+      Variables:
+        env: dev
+       
 
   MyLambdaPermission:
     Type: 'AWS::Lambda::Permission'
@@ -98,7 +145,9 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MyLambdaFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/*/GET/hello'
+      SourceArn: 
+        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/*/GET/hello'
+        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/*/GET/world'
   
   MyAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
