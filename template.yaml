@@ -23,7 +23,7 @@ Resources:
         Variables:
           env: dev
           
-   MyLambdaFunction2:
+  MyLambdaFunction2:
     Type: 'AWS::Lambda::Function'
     Properties:
       FunctionName: stage-my-test-function
