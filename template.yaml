@@ -60,7 +60,7 @@ Resources:
   MyRestApi:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
-      Name: my-test-api
+      Name: my-test-restapi
       EndpointConfiguration:
         Types:
           - REGIONAL
