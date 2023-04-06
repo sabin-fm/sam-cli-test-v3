@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-#deploymentsample
+#testcase
 Parameters:
   Region:
     Type: String
@@ -15,25 +15,25 @@ Resources:
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
-      FunctionName : dev-my-test-function
+      FunctionName: dev-my-test-function
       Handler: lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
       Environment:
         Variables:
           env: dev
-
-  MyLambdaFunction2:
+          
+   MyLambdaFunction2:
     Type: 'AWS::Lambda::Function'
     Properties:
-      FunctionName : stage-my-test-function
+      FunctionName: stage-my-test-function
       Handler: lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
       Environment:
         Variables:
           env: stage
-          
+
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -71,7 +71,7 @@ Resources:
       RestApiId: !Ref MyRestApi
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'hello'
-      
+  
   MyResource2:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
@@ -92,6 +92,7 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
         
+  
   MyMethod2:
     Type: 'AWS::ApiGateway::Method'
     Properties:
@@ -104,29 +105,21 @@ Resources:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction2.Arn}/invocations'
-        
-   MyAuthorizer:
+
+  MyAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
     Properties:
       Name: my-cognito-authorizer
       Type: COGNITO_USER_POOLS
       IdentitySource: method.request.header.Authorization
       RestApiId: !Ref MyRestApi
-      ProviderARNs: 
+      ProviderARNs:
         - !Sub arn:aws:cognito-idp:${Region}:${AccountId}:userpool/us-east-1_t4ca30NhA    #${UserPoolId}
 
-
-  MyDeployment1:
+  MyDeployment:
     Type: 'AWS::ApiGateway::Deployment'
     DependsOn:
-      - MyMethod1
-    Properties:
-      RestApiId: !Ref MyRestApi
-  
-  MyDeployment2:
-    Type: 'AWS::ApiGateway::Deployment'
-    DependsOn:
-      - MyMethod2
+      - MyMethod
     Properties:
       RestApiId: !Ref MyRestApi
 
@@ -134,7 +127,7 @@ Resources:
     Type: 'AWS::ApiGateway::Stage'
     Properties:
       RestApiId: !Ref MyRestApi
-      DeploymentId: !Ref MyDeployment1
+      DeploymentId: !Ref MyDeployment
       StageName: dev
       Variables:
         env: dev
@@ -143,11 +136,11 @@ Resources:
     Type: 'AWS::ApiGateway::Stage'
     Properties:
       RestApiId: !Ref MyRestApi
-      DeploymentId: !Ref MyDeployment2
+      DeploymentId: !Ref MyDeployment
       StageName: stage
       Variables:
         env: stage
-       
+
   MyLambdaPermission1:
     Type: 'AWS::Lambda::Permission'
     Properties:
@@ -155,13 +148,12 @@ Resources:
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/hello'
-        
-  MyLambdaPermission2:
+      
+   MyLambdaPermission2:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MyLambdaFunction2
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/world'
-  
- 
+      
