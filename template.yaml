@@ -119,7 +119,8 @@ Resources:
   MyDeployment:
     Type: 'AWS::ApiGateway::Deployment'
     DependsOn:
-      - MyMethod
+      - MyMethod1
+      - MyMethod2
     Properties:
       RestApiId: !Ref MyRestApi
 
@@ -149,7 +150,7 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/hello'
       
-   MyLambdaPermission2:
+  MyLambdaPermission2:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
