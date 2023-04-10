@@ -28,9 +28,7 @@ Resources:
       Environment:
         Variables:
           env: ${Env}
-          
-  
-
+         
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -56,7 +54,7 @@ Resources:
 
 
 
-  MyRestApi:
+  MyRestApi1:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
       Name: ${Env}-my-test-restapi
@@ -65,21 +63,21 @@ Resources:
           - REGIONAL
 
 
-  MyResourceA:
+  MyResource1:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref MyRestApi
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'hello'
   
-  MyResourceB:
+  MyResource1:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref MyRestApi
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'world'
 
-  MyMethodA1:
+  MyMethod1:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       RestApiId: !Ref MyRestApi
@@ -92,7 +90,7 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
         
-  MyMethodA2:
+  MyMethod2:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       RestApiId: !Ref MyRestApi
@@ -106,7 +104,7 @@ Resources:
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
         
   
-  MyMethodB1:
+  MyMethod3:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       RestApiId: !Ref MyRestApi
@@ -119,7 +117,7 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction2.Arn}/invocations'
         
-  MyMethodB2:
+  MyMethod4:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       RestApiId: !Ref MyRestApi
@@ -145,14 +143,14 @@ Resources:
   MyDeployment:
     Type: 'AWS::ApiGateway::Deployment'
     DependsOn:
-      - MyMethodA1
-      - MyMethodA2
-      - MyMethodB1
-      - MyMethodB2
+      - MyMethod1
+      - MyMethod2
+      - MyMethod3
+      - MyMethod4
     Properties:
       RestApiId: !Ref MyRestApi
 
-  MyStage1:
+  MyStage:
     Type: 'AWS::ApiGateway::Stage'
     Properties:
       RestApiId: !Ref MyRestApi
@@ -162,7 +160,7 @@ Resources:
         env: ${Env}
         
 
-  MyLambdaPermission1:
+  MyLambdaPermission:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
