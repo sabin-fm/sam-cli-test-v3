@@ -21,7 +21,7 @@ Resources:
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
-      FunctionName: ${Env}-my-test-function
+      FunctionName: !Sub '${Env}-my-test-function'
       Handler: lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
@@ -57,7 +57,7 @@ Resources:
   MyRestApi1:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
-      Name: ${Env}-my-test-restapi
+      Name: !Sub '${Env}-my-test-restapi'
       EndpointConfiguration:
         Types:
           - REGIONAL
