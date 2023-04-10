@@ -14,7 +14,7 @@ Parameters:
   Env:
     Type: String
     Default: dev
-    Description: The AWS account ID where the resources will be created.
+    Description: Environment name.
     
 
 Resources:
@@ -51,7 +51,6 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: '*'
-
 
 
   MyRestApi1:
@@ -109,7 +108,7 @@ Resources:
     Properties:
       RestApiId: !Ref MyRestApi1
       ResourceId: !Ref MyResource2
-      HttpMethod: POST
+      HttpMethod: OPTIONS
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
       AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
       Integration:
@@ -117,7 +116,6 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
         
-  
 
   MyAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
