@@ -141,7 +141,7 @@ Resources:
     Properties:
       RestApiId: !Ref MyRestApi1
       DeploymentId: !Ref MyDeployment
-      StageName: ${Env}
+      StageName: !Sub '${Env}'
       Variables:
         env: ${Env}
         
