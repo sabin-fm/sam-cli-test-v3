@@ -160,13 +160,21 @@ Resources:
         env: ${Env}
         
 
-  MyLambdaPermission:
+  MyLambdaPermission1:
     Type: 'AWS::Lambda::Permission'
     Properties:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
-      SourceArn: 
-        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/GET/hello'
-        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/GET/world'
+      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/GET/hello'
+      
+        
+        
+  MyLambdaPermission2:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref MyLambdaFunction1
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/GET/world'
      
