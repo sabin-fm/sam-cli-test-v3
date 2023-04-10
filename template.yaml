@@ -66,21 +66,21 @@ Resources:
   MyResource1:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'hello'
   
-  MyResource1:
+  MyResource2:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'world'
 
   MyMethod1:
     Type: 'AWS::ApiGateway::Method'
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       ResourceId: !Ref MyResource1
       HttpMethod: GET
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
@@ -93,7 +93,7 @@ Resources:
   MyMethod2:
     Type: 'AWS::ApiGateway::Method'
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       ResourceId: !Ref MyResource1
       HttpMethod: DELETE
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
@@ -107,7 +107,7 @@ Resources:
   MyMethod3:
     Type: 'AWS::ApiGateway::Method'
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       ResourceId: !Ref MyResource2
       HttpMethod: POST
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
@@ -115,12 +115,12 @@ Resources:
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
-        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction2.Arn}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
         
   MyMethod4:
     Type: 'AWS::ApiGateway::Method'
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       ResourceId: !Ref MyResource2
       HttpMethod: POST
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
@@ -128,7 +128,7 @@ Resources:
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: PATCH
-        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction2.Arn}/invocations'
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
 
   MyAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
@@ -136,7 +136,7 @@ Resources:
       Name: my-cognito-authorizer
       Type: COGNITO_USER_POOLS
       IdentitySource: method.request.header.Authorization
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       ProviderARNs:
         - !Sub arn:aws:cognito-idp:${Region}:${AccountId}:userpool/us-east-1_t4ca30NhA    #${UserPoolId}
 
@@ -148,12 +148,12 @@ Resources:
       - MyMethod3
       - MyMethod4
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
 
   MyStage:
     Type: 'AWS::ApiGateway::Stage'
     Properties:
-      RestApiId: !Ref MyRestApi
+      RestApiId: !Ref MyRestApi1
       DeploymentId: !Ref MyDeployment
       StageName: ${Env}
       Variables:
@@ -167,6 +167,6 @@ Resources:
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
       SourceArn: 
-        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/hello'
-        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/world'
+        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/GET/hello'
+        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/GET/world'
      
