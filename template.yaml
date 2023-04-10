@@ -151,7 +151,7 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/GET/hello'
+      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/GET/hello'
       
             
   MyLambdaPermission2:
@@ -160,5 +160,5 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/POST/world'
+      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/POST/world'
      
