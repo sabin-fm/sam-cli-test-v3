@@ -10,29 +10,26 @@ Parameters:
     Type: String
     Default: 548616401217
     Description: The AWS account ID where the resources will be created.
+      
+  Env:
+    Type: String
+    Default: dev
+    Description: The AWS account ID where the resources will be created.
+    
 
 Resources:
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
-      FunctionName: dev-my-test-function
+      FunctionName: ${Env}-my-test-function
       Handler: lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
       Environment:
         Variables:
-          env: dev
+          env: ${Env}
           
-  MyLambdaFunction2:
-    Type: 'AWS::Lambda::Function'
-    Properties:
-      FunctionName: stage-my-test-function
-      Handler: lambda_function.lambda_handler
-      Role: !GetAtt MyLambdaRole.Arn
-      Runtime: python3.9
-      Environment:
-        Variables:
-          env: stage
+  
 
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
@@ -57,29 +54,32 @@ Resources:
                   - logs:PutLogEvents
                 Resource: '*'
 
+
+
   MyRestApi:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
-      Name: my-test-restapi
+      Name: ${Env}-my-test-restapi
       EndpointConfiguration:
         Types:
           - REGIONAL
 
-  MyResource1:
+
+  MyResourceA:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref MyRestApi
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'hello'
   
-  MyResource2:
+  MyResourceB:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref MyRestApi
       ParentId: !GetAtt MyRestApi.RootResourceId
       PathPart: 'world'
 
-  MyMethod1:
+  MyMethodA1:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       RestApiId: !Ref MyRestApi
@@ -92,18 +92,44 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
         
-  
-  MyMethod2:
+  MyMethodA2:
     Type: 'AWS::ApiGateway::Method'
     Properties:
       RestApiId: !Ref MyRestApi
-      ResourceId: !Ref MyResource2
-      HttpMethod: GET
+      ResourceId: !Ref MyResource1
+      HttpMethod: DELETE
       AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
       AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
       Integration:
         Type: AWS_PROXY
         IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
+        
+  
+  MyMethodB1:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ResourceId: !Ref MyResource2
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
+      AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction2.Arn}/invocations'
+        
+  MyMethodB2:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref MyRestApi
+      ResourceId: !Ref MyResource2
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
+      AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: PATCH
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction2.Arn}/invocations'
 
   MyAuthorizer:
@@ -119,8 +145,10 @@ Resources:
   MyDeployment:
     Type: 'AWS::ApiGateway::Deployment'
     DependsOn:
-      - MyMethod1
-      - MyMethod2
+      - MyMethodA1
+      - MyMethodA2
+      - MyMethodB1
+      - MyMethodB2
     Properties:
       RestApiId: !Ref MyRestApi
 
@@ -129,18 +157,10 @@ Resources:
     Properties:
       RestApiId: !Ref MyRestApi
       DeploymentId: !Ref MyDeployment
-      StageName: dev
+      StageName: ${Env}
       Variables:
-        env: dev
+        env: ${Env}
         
-  MyStage2:
-    Type: 'AWS::ApiGateway::Stage'
-    Properties:
-      RestApiId: !Ref MyRestApi
-      DeploymentId: !Ref MyDeployment
-      StageName: stage
-      Variables:
-        env: stage
 
   MyLambdaPermission1:
     Type: 'AWS::Lambda::Permission'
@@ -148,13 +168,7 @@ Resources:
       Action: 'lambda:InvokeFunction'
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/hello'
-      
-  MyLambdaPermission2:
-    Type: 'AWS::Lambda::Permission'
-    Properties:
-      Action: 'lambda:InvokeFunction'
-      FunctionName: !Ref MyLambdaFunction2
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/world'
-      
+      SourceArn: 
+        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/hello'
+        - !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi}/GET/world'
+     
