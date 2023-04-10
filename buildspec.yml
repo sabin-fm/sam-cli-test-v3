@@ -1,4 +1,8 @@
 version: 0.2
+
+env:
+  variables:
+    MyEnv: "stage"
 phases:
   install:
     runtime-versions:
@@ -14,6 +18,6 @@ phases:
   post_build:
     commands:
       - sam package --template-file template.yaml --s3-bucket sam-cli-dionysus-bucket --output-template-file packaged.yaml
-      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name samcli-dionysus-stack --capabilities CAPABILITY_IAM
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name samcli-dionysus-stack --parameter-overrides Env=$MyEnv --capabilities CAPABILITY_IAM
       
  
