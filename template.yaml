@@ -22,7 +22,7 @@ Resources:
     Type: 'AWS::Lambda::Function'
     Properties:
       FunctionName: !Sub '${Env}-my-test-function'
-      Handler: lambda_function.lambda_handler
+      Handler: lambda_functions.function1.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
       Environment:
