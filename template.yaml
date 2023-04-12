@@ -13,11 +13,11 @@ Parameters:
       
   Env:
     Type: String
-    Default: testing
+    Default: dev
     Description: Environment name.
 
 Resources:
-  MyLambdaFunction1:
+  user-api:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: resources/user-api.yml
