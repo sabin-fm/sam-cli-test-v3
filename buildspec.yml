@@ -11,14 +11,14 @@ phases:
     commands:
       # Install the AWS CLI and SAM CLI
       - pip3 install awscli aws-sam-cli
-      - pip install boto3
-      - sam --version
+     #- pip install boto3
+     #- sam --version
 
   build:
     commands:
       - sam validate --template template.yaml
       - sam build -t template.yaml
-      - aws s3 sync resources s3://samcli-python-bucket/resources/ --delete
+     #- aws s3 sync resources s3://samcli-python-bucket/resources/ --delete
 
   post_build:
     commands:
