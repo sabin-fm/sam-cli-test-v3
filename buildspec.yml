@@ -3,6 +3,7 @@ version: 0.2
 env:
   variables:
     MyEnv: "devops"
+
 phases:
   install:
     runtime-versions:
@@ -12,14 +13,19 @@ phases:
       - pip3 install awscli aws-sam-cli
       - pip install boto3
       - sam --version
+
   build:
     commands:
       - sam validate --template template.yaml
       - sam build -t template.yaml
       - aws s3 sync resources s3://samcli-python-bucket/resources/ --delete
+
   post_build:
     commands:
       - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file packaged.yaml
-      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name dev-dionysus-stack --parameter-overrides Env=$MyEnv --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
-      
- 
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset \
+        --template-file packaged.yaml \
+        --stack-name dev-dionysus-stack \
+        --parameter-overrides Env=$MyEnv \
+        --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND \
+        --include-nested-stacks 
