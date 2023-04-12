@@ -1,5 +1,6 @@
+#sample-template
 AWSTemplateFormatVersion: '2010-09-09'
-#testcase
+
 Parameters:
   Region:
     Type: String
