@@ -6,7 +6,7 @@ env:
 phases:
   install:
     runtime-versions:
-      python: 3.9
+      python: lastest
     commands:
       # Install the AWS CLI and SAM CLI
       - pip3 install awscli aws-sam-cli
