@@ -16,7 +16,7 @@ phases:
     commands:
       - sam validate --template template.yaml
       - sam build -t template.yaml
-      - aws s3 sync resources s3://samcli-python-bucket --delete
+      - aws s3 sync resources s3://samcli-python-bucket/resources/ --delete
   post_build:
     commands:
       - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file packaged.yaml
