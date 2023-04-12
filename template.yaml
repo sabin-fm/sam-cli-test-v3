@@ -17,10 +17,11 @@ Parameters:
     Description: Environment name.
 
 Resources:
-  Type: AWS::CloudFormation::Stack
-  Properties:
-    TemplateURL: !Sub https://samcli-python-bucket.s3.amazonaws.com/lambda_functions.yaml
-    Parameters: 
+  Lambdafunction:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://samcli-python-bucket.s3.amazonaws.com/lambda_functions.yaml
+      Parameters: 
         Region: !Ref Region
         AccountId: !Ref AccountId
         Env: !Ref Env
