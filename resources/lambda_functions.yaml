@@ -4,17 +4,17 @@ Parameters:
   Region:
     Type: String
     Description: The AWS region in which to create resources.
-    Default: us-east-1
+    #Default: us-east-1
 
   AccountId:
     Type: String
     Description: The AWS account ID where the resources will be created.
-    Default: 548616401217
+    #Default: 548616401217
       
   Env:
     Type: String
     Description: Environment name.
-    Default: testing
+    #Default: testing
     
 Resources:
   MyLambdaRole:
