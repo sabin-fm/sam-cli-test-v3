@@ -17,7 +17,7 @@ Parameters:
     Description: Environment name.
 
 Resources:
-  user-api:
+  userapi:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: resources/user-api.yml
