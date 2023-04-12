@@ -22,7 +22,7 @@ Resources:
     Type: AWS::Serverless::Application
     Properties:
       # Lambda function
-      Location: ./resources/lambda_functions.yml
+      Location: ./resources/lambda_functions.yaml
       
 
 
