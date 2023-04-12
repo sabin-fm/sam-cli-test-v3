@@ -18,13 +18,14 @@ Parameters:
     Description: Environment name.
     
 Resources:
-  yourApplicationAliasName:
-    Type: AWS::Serverless::Application
+  LambdaStack:
+    Type: AWS::CloudFormation::Stack
     Properties:
-      # Lambda function
-      Location: ./resources/lambda_functions.yaml
-      
-
-
-
+      TemplateBody: !Sub ${file(./resources/lambda_functions.yaml)}
+      Parameters:
+        Region: !Ref Region
+        AccountId: !Ref AccountId
+        Env: !Ref Env
+           
+     
   
