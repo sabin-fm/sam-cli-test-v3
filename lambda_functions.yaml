@@ -1,4 +1,8 @@
-MyLambdaFunction1:
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: AWS Lambda function.
+Resources:
+  MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
       FunctionName: !Sub '${Env}-user-api-1'
@@ -31,5 +35,3 @@ MyLambdaFunction1:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: '*'
-                
-   
