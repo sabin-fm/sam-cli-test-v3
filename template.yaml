@@ -14,7 +14,7 @@ Parameters:
       
   Env:
     Type: String
-    Default: dev
+    Default: testing
     Description: Environment name.
     
 Resources:
