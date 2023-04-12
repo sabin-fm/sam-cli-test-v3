@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    MyEnv: "dev"
+    MyEnv: "testing"
 phases:
   install:
     runtime-versions:
