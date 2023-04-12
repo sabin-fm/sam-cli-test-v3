@@ -4,29 +4,19 @@ Parameters:
   Region:
     Type: String
     Description: The AWS region in which to create resources.
+    Default: us-east-1
 
   AccountId:
     Type: String
     Description: The AWS account ID where the resources will be created.
+    Default: 548616401217
       
   Env:
     Type: String
     Description: Environment name.
+    Default: testing
     
-Description: AWS Lambda function.
-
 Resources:
-  MyLambdaFunction1:
-    Type: 'AWS::Lambda::Function'
-    Properties:
-      FunctionName: !Sub '${Env}-user-api-1'
-      Handler: user-api/lambda_function.lambda_handler
-      Role: !GetAtt MyLambdaRole.Arn
-      Runtime: python3.9
-      Environment:
-        Variables:
-          env: !Sub '${Env}'
-         
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -49,3 +39,14 @@ Resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: '*'
+
+  MyLambdaFunction1:
+    Type: 'AWS::Lambda::Function'
+    Properties:
+      FunctionName: !Sub '${Env}-user-api-1'
+      Handler: user-api/lambda_function.lambda_handler
+      Role: !GetAtt MyLambdaRole.Arn
+      Runtime: python3.9
+      Environment:
+        Variables:
+          env: !Sub '${Env}'
