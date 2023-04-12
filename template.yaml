@@ -20,7 +20,7 @@ Resources:
   MyLambdaFunction1:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: resources/lambda_functions.yaml
+      TemplateURL: resources/user-api.yml
       Parameters: 
         Region: !Ref Region
         AccountId: !Ref AccountId
