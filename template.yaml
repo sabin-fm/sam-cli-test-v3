@@ -22,8 +22,4 @@ Resources:
     Properties:
       # Lambda function
       Location: ./resources/lambda_functions.yaml
-      parameters: 
-        Region: !Ref Region
-        AccountId: !Ref AccountId
-        Env: !Ref Env
-    
+     
