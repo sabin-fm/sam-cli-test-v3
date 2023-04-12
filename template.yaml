@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
+#Transform: AWS::Serverless-2016-10-31
 
 Parameters:
   Region:
@@ -21,7 +21,7 @@ Resources:
   LambdaStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateBody: !Sub ${file(./resources/lambda_functions.yaml)}
+      TemplateBody: !Sub ${file(resources/lambda_functions.yaml)}
       Parameters:
         Region: !Ref Region
         AccountId: !Ref AccountId
