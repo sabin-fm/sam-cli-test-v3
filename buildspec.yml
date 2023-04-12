@@ -10,6 +10,7 @@ phases:
     commands:
       # Install the AWS CLI and SAM CLI
       - pip3 install awscli aws-sam-cli
+      - pip install boto3
       - sam --version
   build:
     commands:
