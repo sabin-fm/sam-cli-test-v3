@@ -2,9 +2,9 @@ version: 0.2
 
 env:
   variables:
-    Env: "dev"
-    AccountId: "548616401217"
-    Region: "us-east-1"
+    MyEnv: "dev"
+   # MyAccountId: "548616401217"
+   # MyRegion: "us-east-1"
 
 phases:
   install:
@@ -25,5 +25,5 @@ phases:
   post_build:
     commands:
       - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file packaged.yaml
-      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name dev-dionysus-stack --parameter-overrides Env=$Env AccountId=$AccountId Region=$Region --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name dev-dionysus-stack --parameter-overrides Env=$MyEnv --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
        
