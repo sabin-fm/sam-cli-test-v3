@@ -17,7 +17,7 @@ phases:
       - sam build -t template.yaml
   post_build:
     commands:
-      - sam package --template-file template.yaml --s3-bucket sam-cli-dionysus-bucket --output-template-file packaged.yaml
+      - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file packaged.yaml
       - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name samcli-dionysus-stack --parameter-overrides Env=$MyEnv --capabilities CAPABILITY_IAM
       
  
