@@ -3,12 +3,12 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   Region:
     Type: String
-    Default: us-east-1
+    #Default: us-east-1
     Description: The AWS region in which to create resources.
 
   AccountId:
     Type: String
-    Default: 548616401217
+    #Default: 548616401217
     Description: The AWS account ID where the resources will be created.
       
   Env:
@@ -26,4 +26,3 @@ Resources:
         AccountId: !Ref AccountId
         Env: !Ref Env
     
-      
