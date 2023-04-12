@@ -20,7 +20,8 @@ Resources:
   Lambdafunction:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub https://samcli-python-bucket.s3.amazonaws.com/lambda_functions.yaml
+      Location: ./resources/lambda_functions.yaml
+     # TemplateURL: !Sub https://samcli-python-bucket.s3.amazonaws.com/lambda_functions.yaml
       Parameters: 
         Region: !Ref Region
         AccountId: !Ref AccountId
