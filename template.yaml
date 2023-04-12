@@ -17,7 +17,7 @@ Parameters:
     Description: Environment name.
 
 Resources:
-  Lambdafunction:
+  MyLambdaFunction1:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://samcli-python-bucket.s3.amazonaws.com/resources/lambda_functions.yaml
