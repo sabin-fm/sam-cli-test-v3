@@ -1,4 +1,8 @@
-MyRestApi1:
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: AWS API gateways.
+Resources:
+  MyRestApi1:
     Type: 'AWS::ApiGateway::RestApi'
     Properties:
       Name: !Sub '${Env}-user-api-1'
@@ -116,4 +120,3 @@ MyRestApi1:
       StageName: !Sub '${Env}'
       Variables:
         env: !Sub '${Env}'
-     
