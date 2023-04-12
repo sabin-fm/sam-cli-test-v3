@@ -22,7 +22,7 @@ phases:
 
   post_build:
     commands:
-     # - aws cloudformation create-change-set --include-nested-stacks 
+      - aws cloudformation create-change-set --include-nested-stacks 
       - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file packaged.yaml
-      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name dev-dionysus-stack --parameter-overrides Env=$MyEnv --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND --include-nested-stacks
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name dev-dionysus-stack --parameter-overrides Env=$MyEnv --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
        
