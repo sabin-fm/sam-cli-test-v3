@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  Region:
+    Type: String
+    Default: us-east-1
+    Description: The AWS region in which to create resources.
+
+  AccountId:
+    Type: String
+    Default: 548616401217
+    Description: The AWS account ID where the resources will be created.
+      
+  Env:
+    Type: String
+    Default: dev
+    Description: Environment name.
+    
+
+Resources:
+  - ${file(resources/lambda_functions.yaml)}
+  - ${file(resources/api_gateways.yaml)}
+  - ${file(resources/lambda_permissions.yaml)}
+
+
+
+  
