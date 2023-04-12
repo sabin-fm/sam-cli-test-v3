@@ -25,5 +25,5 @@ phases:
   post_build:
     commands:
       - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file packaged.yaml
-      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name dev-dionysus-stack --parameter-overrides Env=$MyEnv AccountId=$MyAccountId Region=$MyRegion --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name $MyEnv-dionysus-stack --parameter-overrides Env=$MyEnv AccountId=$MyAccountId Region=$MyRegion --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
        
