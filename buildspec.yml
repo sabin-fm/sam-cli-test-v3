@@ -20,10 +20,10 @@ phases:
     commands:
       - sam validate --template template.yaml
       - sam build -t template.yaml
-     #- aws s3 sync resources s3://samcli-python-bucket/resources/ --delete
+     #- aws s3 sync resources s3://sam-cli-dionysus-bucket/resources/ --delete
 
   post_build:
     commands:
-      - sam package --template-file template.yaml --s3-bucket samcli-python-bucket --output-template-file packaged.yaml
+      - sam package --template-file template.yaml --s3-bucket sam-cli-dionysus-bucket --output-template-file packaged.yaml
       - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name $MyEnv-dionysus-stack --parameter-overrides Env=$MyEnv AccountId=$MyAccountId Region=$MyRegion --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
        
