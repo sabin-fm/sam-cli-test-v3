@@ -20,7 +20,7 @@ Resources:
   userapi:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: resources/user-api.yml
+      TemplateURL: user-api/users-api-template.yml
       Parameters: 
         Region: !Ref Region
         AccountId: !Ref AccountId
