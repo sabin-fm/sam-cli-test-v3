@@ -77,9 +77,9 @@ Resources:
       PathPart: 'user'
       
   UnderResource1:
-    Type: AWS::ApiGateway::Resource
+    Type: 'AWS::ApiGateway::Resource'
     Properties:
-      RestApiId: !Ref MyApi
+      RestApiId: !Ref MyRestApi1
       ParentId: !GetAtt MyResource1.Id
       PathPart: comments
   
