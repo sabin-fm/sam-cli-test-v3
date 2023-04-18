@@ -21,7 +21,7 @@ Resources:
   MyLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub '${Env}-check-gmail-api-1'
+      FunctionName: !Sub '${Env}-test-1'
       PackageType: Image
     #ImageConfig:
       #Command:
@@ -30,7 +30,7 @@ Resources:
         #- "lambda_runtime_entrypoint"
       #WorkingDirectory: /var/task
       Code:
-        ImageUri: ${AccountId}.dkr.ecr.${Region}.amazonaws.com/check-gmail-api:latest
+        ImageUri: ${AccountId}.dkr.ecr.${Region}.amazonaws.com/test:latest
       Role: !GetAtt MyLambdaRole.Arn
 
 
