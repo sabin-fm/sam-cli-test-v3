@@ -32,7 +32,7 @@ Resources:
     Properties:
       LayerName: MyLambdaLayer
       Content:
-        S3Bucket: ${Env}-dionysus-backend-bucket
+        S3Bucket: sam-cli-dionysus-bucket
         S3Key: lambda-layers/pandas_layer.zip
       CompatibleRuntimes:
         - python3.9
