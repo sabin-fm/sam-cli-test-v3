@@ -1,33 +1,54 @@
 AWSTemplateFormatVersion: '2010-09-09'
-#testcase
+#Transform: 'AWS::Serverless-2016-10-31'
 Parameters:
   Region:
     Type: String
-    Default: us-east-1
-    Description: The AWS region in which to create resources.
+    #Default: 'us-east-1'
+    Description: The AWS region in which to create resources
 
   AccountId:
     Type: String
-    Default: 548616401217
+    #Default: '548616401217'
     Description: The AWS account ID where the resources will be created.
       
   Env:
     Type: String
-    Default: dev
+    #Default: 'devops'
     Description: Environment name.
     
+Resources:  
 
-Resources:
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${Env}-test-1'
+      PackageType: Image
+      ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api:latest
+
+
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
       FunctionName: !Sub '${Env}-user-api-1'
-      Handler: user-api/lambda_function.lambda_handler
+      Handler: lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
+      Layers:
+        - !Ref MyLambdaLayer
       Environment:
         Variables:
-          env: !Sub '${Env}'
+          env: !Sub '${Env}'  
+          
+  MyLambdaLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      LayerName: MyLambdaLayer
+      Content:
+        S3Bucket: sam-cli-dionysus-bucket
+        S3Key: lambda-layers/pandas_layer.zip
+      CompatibleRuntimes:
+        - python3.9
+      Description: My layer description
          
   MyLambdaRole:
     Type: 'AWS::IAM::Role'
@@ -64,8 +85,21 @@ Resources:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref MyRestApi1
-      ParentId: !GetAtt MyRestApi1.RootResourceId
+      ParentId: 
+        Fn::GetAtt:
+          - "MyRestApi1"
+          - "RootResourceId"
       PathPart: 'user'
+      
+  UnderResource1:
+    Type: 'AWS::ApiGateway::Resource'
+    DependsOn:
+      - MyRestApi1
+      - MyResource1
+    Properties:
+      RestApiId: !Ref MyRestApi1
+      ParentId: !Ref MyResource1
+      PathPart: 'comments'
   
   
   MyMethod1:
@@ -140,6 +174,19 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
   
+  MyMethod6:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref MyRestApi1
+      ResourceId: !Ref UnderResource1
+      HttpMethod: GET
+      AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
+      AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
+  
   MyAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
     Properties:
@@ -158,6 +205,7 @@ Resources:
       - MyMethod3
       - MyMethod4
       - MyMethod5
+      - MyMethod6
       
     Properties:
       RestApiId: !Ref MyRestApi1
@@ -210,4 +258,11 @@ Resources:
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/POST/user'
-     
+      
+  MyLambdaPermission6:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref MyLambdaFunction1
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/GET/user/comments'
