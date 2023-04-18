@@ -3,14 +3,17 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   Region:
     Type: String
+    #Default: 'us-east-1'
     Description: The AWS region in which to create resources
 
   AccountId:
     Type: String
+    #Default: '548616401217'
     Description: The AWS account ID where the resources will be created.
       
   Env:
     Type: String
+    #Default: 'devops'
     Description: Environment name.
     
 Resources:  
@@ -80,7 +83,7 @@ Resources:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref MyRestApi1
-      ParentId: !GetAtt MyResource1.Id
+      ParentId: !GetAtt MyResource1
       PathPart: 'comments'
   
   
