@@ -84,7 +84,7 @@ Resources:
       
   UnderResource1:
     Type: 'AWS::ApiGateway::Resource'
-     DependsOn:
+    DependsOn:
       - MyRestApi1
       - MyResource1
     Properties:
