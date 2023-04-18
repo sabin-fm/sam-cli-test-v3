@@ -23,13 +23,7 @@ Resources:
     Properties:
       FunctionName: !Sub '${Env}-test-1'
       PackageType: Image
-    #ImageConfig:
-      #Command:
-        #- "my_function.handler"
-      #EntryPoint:
-        #- "lambda_runtime_entrypoint"
-      #WorkingDirectory: /var/task
-      Code:
+      ImageConfig:
         ImageUri: ${AccountId}.dkr.ecr.${Region}.amazonaws.com/test:latest
       Role: !GetAtt MyLambdaRole.Arn
 
