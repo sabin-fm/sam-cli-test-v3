@@ -25,7 +25,7 @@ Resources:
       PackageType: Image
       Role: !GetAtt MyLambdaRole.Arn
       Code:
-        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api:latest
+        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test:latest
 
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
