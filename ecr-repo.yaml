@@ -1,0 +1,6 @@
+Resources:
+  MyLambdaFunction1:
+    RepositoryUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test:latest
+
+  MyLambdaFunction2:
+    RepositoryUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test2:latest
