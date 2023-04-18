@@ -24,6 +24,6 @@ phases:
 
   post_build:
     commands:
-      - sam package --template-file template.yaml --s3-bucket sam-cli-dionysus-bucket --output-template-file packaged.yaml --image-repositories test=548616401217.dkr.ecr.us-east-1.amazonaws.com/test
+      - sam package --template-file template.yaml --s3-bucket sam-cli-dionysus-bucket --output-template-file packaged.yaml --image-repositories MyLambdaFunction2=548616401217.dkr.ecr.us-east-1.amazonaws.com/test
       - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --template-file packaged.yaml --stack-name $MyEnv-dionysus-stack --parameter-overrides Env=$MyEnv AccountId=$MyAccountId Region=$MyRegion --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND
        
