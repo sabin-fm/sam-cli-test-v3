@@ -17,22 +17,13 @@ Parameters:
     Description: Environment name.
     
 Resources:  
-  MyECRRepository:
-    Type: "AWS::ECR::Repository"
-    Properties:
-      RepositoryName: "test"
 
   MyLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: !Sub '${Env}-test-1'
       PackageType: Image
-      ImageConfig:
-        ImageUri: !Join
-          - "/"
-          - - !Ref MyECRRepository
-            - "test:latest"
-      Role: !GetAtt MyLambdaRole.Arn
+      ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api:latest
 
 
   MyLambdaFunction1:
