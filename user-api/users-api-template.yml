@@ -165,6 +165,19 @@ Resources:
         IntegrationHttpMethod: POST
         Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
   
+  MyMethod6:
+    Type: 'AWS::ApiGateway::Method'
+    Properties:
+      RestApiId: !Ref MyRestApi1
+      ResourceId: !Ref UnderResource1
+      HttpMethod: GET
+      AuthorizationType: COGNITO_USER_POOLS  # Set authorization type to COGNITO_USER_POOLS
+      AuthorizerId: !Ref MyAuthorizer  # Set the ID of the authorizer
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub 'arn:aws:apigateway:${Region}:lambda:path/2015-03-31/functions/${MyLambdaFunction1.Arn}/invocations'
+  
   MyAuthorizer:
     Type: 'AWS::ApiGateway::Authorizer'
     Properties:
@@ -183,6 +196,7 @@ Resources:
       - MyMethod3
       - MyMethod4
       - MyMethod5
+      - MyMethod6
       
     Properties:
       RestApiId: !Ref MyRestApi1
@@ -235,3 +249,12 @@ Resources:
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/POST/user'
+      
+  MyLambdaPermission6:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref MyLambdaFunction1
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/GET/user/comments'
+
