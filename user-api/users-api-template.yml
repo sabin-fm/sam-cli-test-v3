@@ -85,11 +85,11 @@ Resources:
   UnderResource1:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
+    DependsOn:
+      - MyRestApi1
+      - MyResource1
       RestApiId: !Ref MyRestApi1
-      ParentId: 
-        Fn::GetAtt:
-          - "MyResource1"
-          - "Id"
+      ParentId: !Ref MyResource1
       PathPart: 'comments'
   
   
