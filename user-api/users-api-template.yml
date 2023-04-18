@@ -12,9 +12,8 @@ Parameters:
   Env:
     Type: String
     Description: Environment name.
-
     
-Resources:
+Resources:  
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
@@ -26,11 +25,12 @@ Resources:
         - !Ref MyLambdaLayer
       Environment:
         Variables:
-          env: !Sub '${Env}'
+          env: !Sub '${Env}'  
           
   MyLambdaLayer:
     Type: AWS::Lambda::LayerVersion
     Properties:
+      LayerName: MyLambdaLayer
       Content:
         S3Bucket: ${Env}-dionysus-backend-bucket
         S3Key: lambda-layers/pandas_layer.zip
@@ -81,7 +81,7 @@ Resources:
     Properties:
       RestApiId: !Ref MyRestApi1
       ParentId: !GetAtt MyResource1.Id
-      PathPart: comments
+      PathPart: 'comments'
   
   
   MyMethod1:
