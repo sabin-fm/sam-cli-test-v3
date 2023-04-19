@@ -18,8 +18,10 @@ phases:
 
   build:
     commands:
+    
       - sam validate --template template.yaml
       - sam build -t template.yaml
+      - aws ecr get-login-password --region ${Region} | docker login --username AWS --password-stdin ${AccountId}.dkr.ecr.us-east-1.amazonaws.com 
      #- aws s3 sync resources s3://sam-cli-dionysus-bucket/resources/ --delete
 
   post_build:
