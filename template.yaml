@@ -21,7 +21,7 @@ Resources:
   MyLambdaFunction2:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub '${Env}-test-1'
+      FunctionName: MyLambdaFunction2 #!Sub '${Env}-test-1'
       PackageType: Image
       Role: !GetAtt MyLambdaRole.Arn
       Code:
