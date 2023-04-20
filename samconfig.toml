@@ -1,23 +1,14 @@
 version = 0.1
 [default]
 [default.deploy]
-[default.deploy.parameters]
-stackName = "dev-dionysus-stack"
-region = "us-east-1"
-confirm_changeset = false
-capabilities = "CAPABILITY_IAM"
-capabilities = "CAPABILITY_AUTO_EXPAND"
-[default.build]
-[default.build.options]
---use-container = true
 [default.package]
+
 [default.package.options]
-s3_bucket = "sam-cli-dionysus-bucket"
-s3_prefix = ""
 image_repository = "548616401217.dkr.ecr.us-east-1.amazonaws.com/test"
-[default.deploy.image_repositories]
 imageRepository = "548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api"
-[default.parameters]
-env = "dev"
-accountId = "548616401217"
-region = "us-east-1"
+
+[default.deploy.image_repositories]
+image_repository = "548616401217.dkr.ecr.us-east-1.amazonaws.com/test"
+imageRepository = "548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api"
+
+
