@@ -274,3 +274,8 @@ Resources:
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/GET/user/comments'
+      
+      
+Outputs:
+  MyLambdaFunction2ImageUri:
+    Value: !Sub "548616401217.dkr.ecr.us-east-1.amazonaws.com/test/${MyLambdaFunction2.LambdaFunction.Arn}"
