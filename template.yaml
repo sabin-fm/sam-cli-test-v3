@@ -16,7 +16,15 @@ Parameters:
     #Default: 'devops'
     Description: Environment name.
     
-Resources:  
+Resources:
+  MyLambdaFunction3:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: MyLambdaFunction3 #!Sub '${Env}-test-2'
+      PackageType: Image
+      Role: !GetAtt MyLambdaRole.Arn
+      Code:
+        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test:latest
 
   MyLambdaFunction2:
     Type: AWS::Lambda::Function
