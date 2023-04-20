@@ -24,8 +24,8 @@ Resources:
       FunctionName: MyLambdaFunction2 #!Sub '${Env}-test-1'
       PackageType: Image
       Role: !GetAtt MyLambdaRole.Arn
-      CodeUri: .
-      ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test:latest
+      Code:
+        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test:latest
 
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
@@ -275,7 +275,3 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/GET/user/comments'
       
-      
-Outputs:
-  MyLambdaFunction2ImageUri:
-    Value: !Sub "548616401217.dkr.ecr.us-east-1.amazonaws.com/test/${MyLambdaFunction2.LambdaFunction.Arn}"
