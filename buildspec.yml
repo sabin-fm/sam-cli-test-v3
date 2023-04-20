@@ -25,5 +25,5 @@ phases:
 
   post_build:
     commands:
-      - sam package ---guided
-      - sam deploy --guided
+      - sam package --config-file samconfig.toml
+      - sam deploy --config-file samconfig.toml
