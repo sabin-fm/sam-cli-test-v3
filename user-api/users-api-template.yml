@@ -16,21 +16,30 @@ Parameters:
     #Default: 'devops'
     Description: Environment name.
     
-Resources:  
-
-  MyLambdaFunction:
+Resources:
+  MyLambdaFunction3:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub '${Env}-test-1'
+      FunctionName: MyLambdaFunction3 #!Sub '${Env}-test-2'
       PackageType: Image
-      ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api:latest
+      Role: !GetAtt MyLambdaRole.Arn
+      Code:
+        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api:latest
 
+  MyLambdaFunction2:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: MyLambdaFunction2 #!Sub '${Env}-test-1'
+      PackageType: Image
+      Role: !GetAtt MyLambdaRole.Arn
+      Code:
+        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test:latest
 
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
     Properties:
       FunctionName: !Sub '${Env}-user-api-1'
-      Handler: lambda_function.lambda_handler
+      Handler: user-api/lambda_function.lambda_handler
       Role: !GetAtt MyLambdaRole.Arn
       Runtime: python3.9
       Layers:
@@ -71,6 +80,13 @@ Resources:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:PutLogEvents
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - ecr:GetAuthorizationToken
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:BatchGetImage
                 Resource: '*'
 
   MyRestApi1:
@@ -266,4 +282,4 @@ Resources:
       FunctionName: !Ref MyLambdaFunction1
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${Region}:${AccountId}:${MyRestApi1}/${Env}/GET/user/comments'
-
+      
