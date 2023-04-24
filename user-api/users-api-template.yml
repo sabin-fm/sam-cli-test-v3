@@ -33,7 +33,7 @@ Resources:
       PackageType: Image
       Role: !GetAtt MyLambdaRole.Arn
       Code:
-        ImageUri:  ${AccountId}.dkr.ecr.${Region}.amazonaws.com/test:latest
+        ImageUri: ${AccountId}.dkr.ecr.${Region}.amazonaws.com/test:latest
 
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
