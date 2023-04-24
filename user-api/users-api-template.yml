@@ -24,7 +24,7 @@ Resources:
       PackageType: Image
       Role: !GetAtt MyLambdaRole.Arn
       Code:
-        ImageUri: ${AccountId}.dkr.ecr.${Region}.amazonaws.com/check-gmail-api:latest
+        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/check-gmail-api:latest
 
   MyLambdaFunction2:
     Type: AWS::Lambda::Function
@@ -33,7 +33,7 @@ Resources:
       PackageType: Image
       Role: !GetAtt MyLambdaRole.Arn
       Code:
-        ImageUri: ${AccountId}.dkr.ecr.${Region}.amazonaws.com/test:latest
+        ImageUri: 548616401217.dkr.ecr.us-east-1.amazonaws.com/test:latest
 
   MyLambdaFunction1:
     Type: 'AWS::Lambda::Function'
